@@ -1,0 +1,17 @@
+﻿@page "/categorias/{Id:long}"
+@inherits EditCategoryPage
+
+<MudText Typo="Typo.h3">Editar Categoria</MudText>
+
+<MudPaper Class="pa-8 mt-4">
+    <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+        <DataAnnotationsValidator />
+
+        <MudTextField Label="Titulo" HelperText="Campo Obrigatorio" @bind-Value="InputModel.Title" For="@(() => InputModel.Title)" />
+        <MudTextField Label="Descrição" Lines="5" HelperText="Campo Obrigatorio" @bind-Value="InputModel.Description" For="@(() => InputModel.Description)" />
+
+        <MudButton Disabled="@IsBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+            Salvar
+        </MudButton>
+    </EditForm>
+</MudPaper>

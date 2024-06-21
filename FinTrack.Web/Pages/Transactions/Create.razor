@@ -1,0 +1,41 @@
+﻿@page "/transacoes/adicionar"
+@using FinTrack.Core.Enums
+@inherits CreateTransactionPage
+
+<MudText Typo="Typo.h3">Nova Transação</MudText>
+
+<MudPaper Class="pa-8 mt-4">
+    <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+        <DataAnnotationsValidator />
+
+        <MudGrid>
+            <MudItem xs="12">
+                <MudTextField Label="Titulo" HelperText="Campo Obrigatorio" @bind-Value="InputModel.Title" For="@(() => InputModel.Title)" />
+                <MudDatePicker Label="Recebido ou pago em" @bind-Date="InputModel.PaidOrReceivedAt" Mask="@(new DateMask("dd/MM/yyyy"))" DateFormat="dd/MM/yyyy" />
+
+                <MudTextField Label="Valor" Format="C" T="decimal" Culture="_pt_BR" @bind-Value="InputModel.Amount" For="@(() => InputModel.Amount)" />
+            </MudItem>
+
+
+            <MudItem xs="6">
+                <MudSelect T="ETransactionType" @bind-Value="InputModel.TransactionType" Label="Tipo da Transação">
+                    @foreach (var type in Enum.GetValues(typeof(ETransactionType)))
+                    {
+                        <MudSelectItem T="ETransactionType" Value="(ETransactionType)type">@type.ToString()</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudSelect @bind-Value="InputModel.CategoryId" Label="Categoria">
+                    @foreach (var category in Categories)
+                    {
+                        <MudSelectItem Value="@category.Id">@category.Title</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+
+        <MudButton Disabled="@IsBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Salvar</MudButton>
+    </EditForm>
+</MudPaper>

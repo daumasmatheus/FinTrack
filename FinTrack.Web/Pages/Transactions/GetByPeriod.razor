@@ -1,0 +1,48 @@
+﻿@page "/transacoes"
+@inherits GetByPeriodPage
+
+<MudText Typo="Typo.h3">Transações</MudText>
+
+<MudGrid>
+    <MudItem xs="9">
+        <MudStack Row="true" Spacing="10">
+            <MudDatePicker Label="Período Incial" Editable="true" @bind-Date="StartDate" Mask="@(new DateMask("dd/MM/yyyy"))" DateFormat="dd/MM/yyyy" />
+            <MudDatePicker Label="Período Final" Editable="true" @bind-Date="EndDate" Mask="@(new DateMask("dd/MM/yyyy"))" DateFormat="dd/MM/yyyy" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.TwoTone.Search" OnClick="() => OnSearchButtonClickedAsync()">Buscar</MudButton>
+        </MudStack>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.TwoTone.Add" Href="/transacoes/adicionar">Nova Transação</MudButton>
+    </MudItem>
+</MudGrid>
+
+<MudDataGrid Class="mt-4" Items="@Transactions" Filterable="true">
+    <Columns>
+        <PropertyColumn Property="x => x.Id" Title="#" />
+        <PropertyColumn Property="x => x.Title" Title="Transação" />        
+        <PropertyColumn Property="x => x.Amount" Title="Quantia" Format="C" Culture="_pt_BR" />
+        
+        <TemplateColumn Title="Tipo" Filterable="true">
+            <CellTemplate>
+                @if (context.Item.TransactionType == Core.Enums.ETransactionType.Deposit)
+                {
+                    <MudChip Color="Color.Success" Size="Size.Small" Variant="Variant.Filled">Entrada</MudChip>
+                } 
+                else
+                {
+                    <MudChip Color="Color.Error" Size="Size.Small" Variant="Variant.Filled">Saída</MudChip>
+                }
+            </CellTemplate>
+        </TemplateColumn>        
+
+        <TemplateColumn Class="d-flex justify-end" Filterable="false">
+            <CellTemplate>
+                <MudStack Row>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => OnDeleteButtonClickedAsync(context.Item.Id, context.Item.Title)"/>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Info" Href="@($"/transacoes/{context.Item.Id}")"/>
+                </MudStack>                
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
